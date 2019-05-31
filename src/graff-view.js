@@ -33,6 +33,19 @@ window.gcexports.compileSrc = (lang, src, resume) => {
     }
   });
 };
+
+// KM: upon viewer dipatch, this is what occurs:
+// Viewer dispatch ->
+// GraffContent.onChange (1st time) ->
+// GraffContent setState ->
+// GraffContent.componentDidUpdate (1st time) ->
+// GraffContent.postData ->
+// GraffContent.compileCode (1st time, clears state.data) ->
+// GraffContent dispatch ->
+// GraffContent.onChange (2nd time) ->
+// GraffContent setState ->
+// GraffContent.componentDidUpdate (2nd time, calls compileCode this time because state.data is empty) ->
+// GraffContent.compileCode (2nd time, skips dispatch because itemId == lastItemId)
 var GraffContent = React.createClass({
   componentWillUnmount: function() {
   },
@@ -235,7 +248,7 @@ var GraffContent = React.createClass({
       let item = data[itemID];
       if (item && !item.obj) {
         // If item doesn't have an obj, then get it from the previous compile of this itemID or codeID.
-        item.obj = 
+        item.obj =
           this.state[itemID] && this.state[itemID].obj ||
           this.state[codeID] && this.state[codeID].obj ||
           this.compileCode(itemID);

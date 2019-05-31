@@ -40,10 +40,16 @@ if (LOCAL_DATABASE) {
 }
 
 const conStrs = [
-  LOCAL_DATABASE ? process.env.DATABASE_URL_LOCAL 
-    : DEBUG ? process.env.DATABASE_URL_DEV 
+  LOCAL_DATABASE ? process.env.DATABASE_URL_LOCAL
+    : DEBUG ? process.env.DATABASE_URL_DEV
     : process.env.DATABASE_URL,
 ];
+
+console.log(DEBUG)
+console.log(LOCAL_COMPILES)
+console.log(LOCAL_DATABASE)
+console.log(process.env.DATABASE_URL_DEV)
+console.log(conStrs)
 
 function getConStr(id) {
   return conStrs[0];
